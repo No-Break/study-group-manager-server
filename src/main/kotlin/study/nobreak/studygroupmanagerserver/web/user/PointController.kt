@@ -14,6 +14,6 @@ class PointController(
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
     fun savePointHistory(@PathVariable userId: Long, @RequestBody request: PointHistoryPostRequest): Long {
-        return pointService.savePointHistory(userId, request.point, request.reason, request.createdDateTime)
+        return pointService.savePointHistory(userId, request.point, request.reason, request.createdDateTime).id
     }
 }
