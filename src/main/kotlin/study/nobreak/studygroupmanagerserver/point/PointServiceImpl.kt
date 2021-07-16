@@ -7,7 +7,12 @@ import java.time.LocalDateTime
 class PointServiceImpl(
     private val pointHistoryRepository: PointHistoryRepository
 ): PointService {
-    override fun savePointHistory(userId: Long, point: Int, reason: String, createdDateTime: LocalDateTime): Long {
-        return pointHistoryRepository.add(userId, point, reason, createdDateTime).id
+    override fun savePointHistory(
+        userId: Long,
+        point: Int,
+        reason: String,
+        createdDateTime: LocalDateTime
+    ): PointHistory {
+        return pointHistoryRepository.add(userId, point, reason, createdDateTime)
     }
 }
