@@ -6,10 +6,12 @@ import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 import org.springframework.http.MediaType
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
+import study.nobreak.studygroupmanagerserver.configuration.JacksonConfiguration
 import study.nobreak.studygroupmanagerserver.point.PointHistory
 import study.nobreak.studygroupmanagerserver.point.PointService
 import java.time.LocalDateTime
@@ -19,6 +21,7 @@ internal class PointControllerTest {
     private val pointService = mock<PointService>()
     private val mockMvc = MockMvcBuilders
         .standaloneSetup(PointController(pointService))
+        .setMessageConverters(MappingJackson2HttpMessageConverter(JacksonConfiguration().objectMapper()))
         .build()
     
     @Test
