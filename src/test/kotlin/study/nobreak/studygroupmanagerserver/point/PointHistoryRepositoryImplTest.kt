@@ -3,15 +3,24 @@ package study.nobreak.studygroupmanagerserver.point
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.io.TempDir
+import java.io.File
 import java.time.LocalDateTime
 import java.time.Month
 
 internal class PointHistoryRepositoryImplTest {
     private lateinit var pointHistoryRepositoryImpl: PointHistoryRepositoryImpl
     
+    @TempDir
+    lateinit var tempDir: File
+    lateinit var pointHistoryTempDataFile: File
+    
     @BeforeEach
     fun setup() {
-        pointHistoryRepositoryImpl = PointHistoryRepositoryImpl()
+        pointHistoryTempDataFile = File(tempDir, "point-history.txt").also { file ->
+            file.bufferedWriter().use { it.flush() }
+        }
+        pointHistoryRepositoryImpl = PointHistoryRepositoryImpl(pointHistoryTempDataFile)
     }
     
     @Test
@@ -29,6 +38,7 @@ internal class PointHistoryRepositoryImplTest {
         assertEquals(point, result.point)
         assertEquals(reason, result.reason)
         assertEquals(createdDateTime, result.createdDateTime)
+        assertEquals("0,1,-1,액션리스트 불이행,2021-01-01T12:00", pointHistoryTempDataFile.readLines()[0])
     }
     
     @Test
@@ -43,5 +53,6 @@ internal class PointHistoryRepositoryImplTest {
         val result = pointHistoryRepositoryImpl.add(userId, point, reason, createdDateTime)
         //Then
         assertEquals(1L, result.id)
+        assertEquals("1,1,-1,액션리스트 불이행,2021-01-01T12:00", pointHistoryTempDataFile.readLines()[1])
     }
 }
